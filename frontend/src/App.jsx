@@ -15,7 +15,28 @@ import AIAnalysis from './components/AIAnalysis'
 import RecommendedActions from './components/RecommendedActions'
 import IncidentTimeline from './components/IncidentTimeline'
 
-const API_BASE = import.meta.env.REACT_APP_API_URL || 'http://localhost:3001'
+// Determine API base URL at runtime, not build time
+const getAPIBase = () => {
+  // Check if there's an API base set globally (for Cloud Run deployment)
+  if (window.API_BASE) {
+    return window.API_BASE
+  }
+
+  // If deployed to Cloud Run, construct backend URL from frontend URL
+  // Frontend: https://cloudops-ai-frontend-xxx.us-central1.run.app
+  // Backend: https://cloudops-ai-backend-xxx.us-central1.run.app
+  if (window.location.hostname.includes('run.app')) {
+    const backendUrl = window.location.href
+      .replace('cloudops-ai-frontend', 'cloudops-ai-backend')
+      .split('/')[0] // Get just the protocol and domain
+    return `${window.location.protocol}//${window.location.hostname.replace('cloudops-ai-frontend', 'cloudops-ai-backend')}`
+  }
+
+  // Default for local development
+  return 'http://localhost:3001'
+}
+
+const API_BASE = getAPIBase()
 
 function App() {
   const [incidents, setIncidents] = useState([])

@@ -41,7 +41,12 @@ app.get('/api/incidents', async (req, res) => {
   try {
     let incidents
     if (db) {
-      incidents = await getIncidents(db)
+      try {
+        incidents = await getIncidents(db)
+      } catch (firebaseErr) {
+        console.warn('Firestore query failed, falling back to memory store:', firebaseErr.message)
+        incidents = memoryStore.incidents
+      }
     } else {
       incidents = memoryStore.incidents
     }
@@ -96,7 +101,12 @@ app.post('/api/incidents', async (req, res) => {
     }
     
     if (db) {
-      await createIncident(db, incident)
+      try {
+        await createIncident(db, incident)
+      } catch (firebaseErr) {
+        console.warn('Firestore write failed, falling back to memory store:', firebaseErr.message)
+        memoryStore.incidents.unshift(incident)
+      }
     } else {
       memoryStore.incidents.unshift(incident)
     }
@@ -119,16 +129,21 @@ app.post('/api/incidents', async (req, res) => {
 app.post('/api/incidents/:id/analyze', async (req, res) => {
   try {
     const { id } = req.params
-    
+
     // Get incident
     let incident
     if (db) {
-      const doc = await db.collection(process.env.FIRESTORE_COLLECTION || 'incidents').doc(id).get()
-      incident = doc.exists ? { id: doc.id, ...doc.data() } : null
+      try {
+        const doc = await db.collection(process.env.FIRESTORE_COLLECTION || 'incidents').doc(id).get()
+        incident = doc.exists ? { id: doc.id, ...doc.data() } : null
+      } catch (firebaseErr) {
+        console.warn('Firestore read failed, falling back to memory store:', firebaseErr.message)
+        incident = memoryStore.incidents.find(i => i.id === id)
+      }
     } else {
       incident = memoryStore.incidents.find(i => i.id === id)
     }
-    
+
     if (!incident) {
       return res.status(404).json({ error: 'Incident not found' })
     }
@@ -170,16 +185,24 @@ app.post('/api/incidents/:id/analyze', async (req, res) => {
         }
       ]
     }
-    
+
     if (db) {
-      await updateIncident(db, updatedIncident)
+      try {
+        await updateIncident(db, updatedIncident)
+      } catch (firebaseErr) {
+        console.warn('Firestore write failed, falling back to memory store:', firebaseErr.message)
+        const idx = memoryStore.incidents.findIndex(i => i.id === id)
+        if (idx >= 0) {
+          memoryStore.incidents[idx] = updatedIncident
+        }
+      }
     } else {
       const idx = memoryStore.incidents.findIndex(i => i.id === id)
       if (idx >= 0) {
         memoryStore.incidents[idx] = updatedIncident
       }
     }
-    
+
     res.json(updatedIncident)
   } catch (err) {
     console.error('Error analyzing incident:', err)
@@ -191,15 +214,20 @@ app.post('/api/incidents/:id/analyze', async (req, res) => {
 app.post('/api/incidents/:id/remediation/approve', async (req, res) => {
   try {
     const { id } = req.params
-    
+
     let incident
     if (db) {
-      const doc = await db.collection(process.env.FIRESTORE_COLLECTION || 'incidents').doc(id).get()
-      incident = doc.exists ? { id: doc.id, ...doc.data() } : null
+      try {
+        const doc = await db.collection(process.env.FIRESTORE_COLLECTION || 'incidents').doc(id).get()
+        incident = doc.exists ? { id: doc.id, ...doc.data() } : null
+      } catch (firebaseErr) {
+        console.warn('Firestore read failed, falling back to memory store:', firebaseErr.message)
+        incident = memoryStore.incidents.find(i => i.id === id)
+      }
     } else {
       incident = memoryStore.incidents.find(i => i.id === id)
     }
-    
+
     if (!incident) {
       return res.status(404).json({ error: 'Incident not found' })
     }
@@ -254,16 +282,24 @@ app.post('/api/incidents/:id/remediation/approve', async (req, res) => {
         }
       ]
     }
-    
+
     if (db) {
-      await updateIncident(db, updatedIncident)
+      try {
+        await updateIncident(db, updatedIncident)
+      } catch (firebaseErr) {
+        console.warn('Firestore write failed, falling back to memory store:', firebaseErr.message)
+        const idx = memoryStore.incidents.findIndex(i => i.id === id)
+        if (idx >= 0) {
+          memoryStore.incidents[idx] = updatedIncident
+        }
+      }
     } else {
       const idx = memoryStore.incidents.findIndex(i => i.id === id)
       if (idx >= 0) {
         memoryStore.incidents[idx] = updatedIncident
       }
     }
-    
+
     res.json(updatedIncident)
   } catch (err) {
     console.error('Error approving remediation:', err)

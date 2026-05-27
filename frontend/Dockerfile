@@ -1,39 +1,25 @@
-# Build stage
 FROM node:18-alpine AS builder
 
 WORKDIR /app
-
-# Copy package files
 COPY package.json ./
-
-# Install dependencies
 RUN npm install
 
-# Copy source
 COPY public ./public
 COPY src ./src
 COPY vite.config.js index.html tailwind.config.js postcss.config.js ./
 
-# Build
+ARG REACT_APP_API_URL=http://localhost:3001
+ENV REACT_APP_API_URL=${REACT_APP_API_URL}
+
 RUN npm run build
 
-# Production stage
 FROM node:18-alpine
-
 WORKDIR /app
-
-# Install simple HTTP server
 RUN npm install -g serve
-
-# Copy built app from builder
 COPY --from=builder /app/dist ./dist
 
-# Expose port
 EXPOSE 3000
-
-# Health check
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
   CMD node -e "require('http').get('http://localhost:3000', (r) => {if (r.statusCode !== 200) throw new Error(r.statusCode)})"
 
-# Start
 CMD ["serve", "-s", "dist", "-l", "3000"]

@@ -9,20 +9,22 @@ export function initializeFirestore() {
   try {
     // Check for credentials in environment
     if (!admin.apps.length) {
-      if (process.env.GOOGLE_APPLICATION_CREDENTIALS) {
-        admin.initializeApp({
-          projectId: process.env.GOOGLE_CLOUD_PROJECT
-        })
-      } else {
-        console.warn('⚠ GOOGLE_APPLICATION_CREDENTIALS not set. Using Application Default Credentials.')
-        admin.initializeApp({
-          projectId: process.env.GOOGLE_CLOUD_PROJECT
-        })
-      }
+      admin.initializeApp({
+        projectId: process.env.GOOGLE_CLOUD_PROJECT
+      })
+      console.log('Firebase Admin initialized with project:', process.env.GOOGLE_CLOUD_PROJECT)
     }
-    
+
+    // Get Firestore instance - explicitly use default database
     db = admin.firestore()
-    console.log('✓ Firestore initialized')
+
+    // Verify connection by attempting a simple query
+    db.collection('_test').limit(1).get().then(() => {
+      console.log('✓ Firestore connection verified')
+    }).catch(err => {
+      console.warn('⚠ Firestore connection test failed:', err.message)
+    })
+
     return db
   } catch (err) {
     console.error('Failed to initialize Firestore:', err.message)
@@ -33,12 +35,22 @@ export function initializeFirestore() {
 export async function getIncidents(database) {
   try {
     const collection = database.collection(process.env.FIRESTORE_COLLECTION || 'incidents')
-    const snapshot = await collection.orderBy('created_at', 'desc').get()
-    
-    return snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data()
-    }))
+    // First try with orderBy, if it fails fall back to no ordering
+    try {
+      const snapshot = await collection.orderBy('created_at', 'desc').get()
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+    } catch (orderErr) {
+      console.warn('orderBy query failed, trying without ordering:', orderErr.message)
+      // Fallback to simple query without ordering
+      const snapshot = await collection.get()
+      return snapshot.docs.map(doc => ({
+        id: doc.id,
+        ...doc.data()
+      }))
+    }
   } catch (err) {
     console.error('Error fetching incidents:', err)
     throw err
