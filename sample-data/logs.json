@@ -1,0 +1,32 @@
+{
+  "sample_logs": {
+    "db_timeout": [
+      "ERROR: Connection timeout on pool-1 after 30000ms",
+      "WARN: Retrying connection attempt 1/3",
+      "WARN: Retrying connection attempt 2/3",
+      "ERROR: Failed to acquire connection after 30s",
+      "CRITICAL: Database unavailable - circuit breaker activated"
+    ],
+    "redis_unavailable": [
+      "WARN: Redis connection timeout to redis-master:6379",
+      "ERROR: Cache service unavailable",
+      "WARN: Falling back to slower query path",
+      "ERROR: Multiple cache misses detected in last 60s",
+      "CRITICAL: Performance degradation - cache down for 120s"
+    ],
+    "http_spike": [
+      "WARN: Request queue depth increased to 50",
+      "WARN: Request queue depth increased to 150",
+      "ERROR: 503 Service Unavailable - server overloaded",
+      "ERROR: Request timeout - processing time exceeded 30s",
+      "CRITICAL: 95th percentile latency at 2000ms"
+    ],
+    "high_latency": [
+      "WARN: P95 latency spike: 500ms (was 100ms)",
+      "WARN: P95 latency spike: 800ms",
+      "ERROR: P95 latency spike: 1200ms - SLA breach",
+      "WARN: Slow query detected - 5000ms execution time",
+      "CRITICAL: Customer-facing latency SLA breach detected"
+    ]
+  }
+}

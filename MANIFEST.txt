@@ -1,0 +1,352 @@
+=============================================================================
+                          CLOUDOPS AI - MANIFEST
+=============================================================================
+
+PROJECT: Cloud-Native AI SRE Platform
+VERSION: 1.0.0
+CREATED: May 27, 2026
+STATUS: Production-Ready
+
+=============================================================================
+                            QUICK FACTS
+=============================================================================
+
+Tech Stack:
+  • Frontend: React 18 + Tailwind CSS
+  • Backend: Node.js 18 + Express
+  • AI Service: Python 3.11 + FastAPI
+  • LLM: Vertex AI Gemini Flash
+  • Database: Firestore
+  • Deployment: Google Cloud Run
+
+Time to Get Running:
+  • Local (no GCP): 3 minutes
+  • Cloud (with GCP): 30 minutes
+
+Files Created: 75+
+Code Lines: 2000+
+Services: 3
+API Endpoints: 10+
+
+=============================================================================
+                         WHAT YOU CAN DO
+=============================================================================
+
+✅ Analyze production logs with AI
+✅ Automatically detect root causes
+✅ Get AI-generated remediation steps
+✅ Track incidents from detection to resolution
+✅ Generate AI postmortems
+✅ Deploy to Cloud Run serverlessly
+✅ Scale automatically on demand
+✅ Monitor with Cloud Logging
+
+=============================================================================
+                          GET STARTED NOW
+=============================================================================
+
+OPTION 1: LOCAL DEMO (3 minutes, no GCP account)
+──────────────────────────────────────────────────
+Terminal 1: cd frontend && npm install && npm start
+Terminal 2: cd backend && npm install && npm start  
+Terminal 3: cd ai-service && python -m venv venv && source venv/bin/activate && pip install -r requirements.txt && python main.py
+
+Then open: http://localhost:3000
+
+OPTION 2: CLOUD DEPLOYMENT (30 minutes, with GCP)
+──────────────────────────────────────────────────
+Step 1: Follow GCP-SETUP.md completely
+Step 2: Run: ./deploy.sh YOUR_PROJECT_ID
+Step 3: Access services via Cloud Run URLs
+
+OPTION 3: UNDERSTAND FIRST
+──────────────────────────
+Read START-HERE.md → QUICK-START.md → README.md
+
+=============================================================================
+                           KEY DOCUMENTS
+=============================================================================
+
+START-HERE.md ............. Begin here! Quick orientation
+QUICK-START.md ............ 30-second local setup
+README.md ................. Full architecture & features
+LOCAL-SETUP.md ............ Complete development guide
+GCP-SETUP.md .............. Step-by-step cloud deployment
+API-REFERENCE.md .......... Complete API documentation
+PROJECT-SUMMARY.md ........ Project overview & details
+
+=============================================================================
+                          PROJECT STRUCTURE
+=============================================================================
+
+CloudOps-AI/
+├── frontend/              React dashboard + Tailwind
+├── backend/               Node.js REST API
+├── ai-service/            Python FastAPI + Vertex AI
+├── deployment/            Cloud Run configuration
+├── sample-data/           Demo incidents & logs
+└── docs/                  All documentation
+
+=============================================================================
+                            HOW IT WORKS
+=============================================================================
+
+1. INCIDENT DETECTION
+   - User clicks "Simulate Outage" or real incident occurs
+   - Incident created with sample logs
+   - Stored in Firestore (cloud) or memory (local)
+
+2. AI ANALYSIS
+   - Logs sent to AI service
+   - Vertex AI Gemini Flash analyzes
+   - Root cause identified with confidence score
+   - Affected services determined
+
+3. REMEDIATION
+   - AI generates step-by-step fix
+   - User reviews and approves
+   - Remediation executed (simulated or real)
+   - Results tracked
+
+4. POSTMORTEM
+   - AI generates incident report
+   - Timeline documented
+   - Lessons learned captured
+   - Incident marked resolved
+
+=============================================================================
+                          CORE FEATURES
+=============================================================================
+
+Real-Time Incident Feed
+  • Live incident list
+  • Status tracking
+  • Severity indicators
+  • Quick selection
+
+AI Analysis Panel
+  • Root cause detection
+  • Confidence scoring
+  • Service impact
+  • MTTR estimation
+
+Remediation Recommendations
+  • AI-suggested fixes
+  • Step-by-step instructions
+  • One-click approval
+  • Execution tracking
+
+Incident Timeline
+  • Visual event flow
+  • Timestamps
+  • Status progression
+  • Full audit trail
+
+=============================================================================
+                          SAMPLE INCIDENTS
+=============================================================================
+
+1. DB Connection Timeout
+   Logs: Connection pool errors, retries, failures
+   Analysis: Pool exhaustion from traffic spike
+   Fix: Increase pool size and restart
+
+2. Redis Unavailable
+   Logs: Cache misses, fallback to slow path
+   Analysis: Redis service down or memory full
+   Fix: Restart Redis or clear cache
+
+3. HTTP 503 Spike
+   Logs: High queue depth, timeouts, overload
+   Analysis: Server capacity exceeded
+   Fix: Auto-scale or add rate limiting
+
+4. High Latency
+   Logs: Slow queries, SLA breaches, timeouts
+   Analysis: Database performance degradation
+   Fix: Optimize queries or scale database
+
+=============================================================================
+                        DEPLOYMENT OPTIONS
+=============================================================================
+
+LOCAL DEVELOPMENT
+  • No GCP required
+  • Mock LLM responses
+  • In-memory storage
+  • Perfect for learning
+  • Cost: $0
+
+CLOUD DEMO (GCP)
+  • Real Vertex AI Gemini
+  • Firestore persistence
+  • Cloud Run serverless
+  • Auto-scaling
+  • Cost: $15-50/month
+
+PRODUCTION (GCP)
+  • Full infrastructure
+  • Real incident handling
+  • Monitoring & alerting
+  • Multiple replicas
+  • Cost: $200-500+/month
+
+=============================================================================
+                            ARCHITECTURE
+=============================================================================
+
+User Browser
+    ↓
+React Frontend (Cloud Run)
+    ↓ REST API
+Node.js Backend (Cloud Run)
+    ↓ gRPC/REST
+Python AI Service (Cloud Run)
+    ↓
+Vertex AI Gemini Flash
+    ↓
+Firestore + Pub/Sub + Cloud Logging
+
+Each service:
+  • Containerized with Docker
+  • Deployed independently
+  • Auto-scales on Cloud Run
+  • Monitored by Cloud Logging
+
+=============================================================================
+                        TECHNOLOGY STACK
+=============================================================================
+
+FRONTEND
+  - React 18 (component framework)
+  - Tailwind CSS (styling)
+  - Vite (build tool, hot reload)
+  - Axios (HTTP client)
+  - Lucide React (icons)
+
+BACKEND
+  - Express.js (HTTP framework)
+  - Firebase Admin SDK (Firestore)
+  - Google Cloud Pub/Sub (messaging)
+  - UUID (ID generation)
+
+AI SERVICE
+  - FastAPI (API framework)
+  - Uvicorn (ASGI server)
+  - Vertex AI SDK (LLM access)
+  - Pydantic (validation)
+
+INFRASTRUCTURE
+  - Docker (containerization)
+  - Google Cloud Run (serverless)
+  - Firestore (database)
+  - Pub/Sub (event streaming)
+  - Cloud Logging (log aggregation)
+
+=============================================================================
+                           COST ANALYSIS
+=============================================================================
+
+LOCAL TESTING
+  Cost: $0/month
+  - No GCP resources
+  - Mock LLM responses
+  - In-memory storage
+  - Perfect for learning
+
+CLOUD DEMO
+  Cost: ~$15-50/month
+  - Vertex AI: ~$5-20
+  - Cloud Run: ~$5-15
+  - Firestore: ~$5 (free tier)
+  - Cloud Logging: Free
+
+CLOUD PRODUCTION
+  Cost: ~$200-500+/month
+  - Vertex AI: ~$100-200
+  - Cloud Run: ~$50-200
+  - Firestore: ~$50-200
+  - Cloud Logging: ~$10
+
+=============================================================================
+                             NEXT STEPS
+=============================================================================
+
+Immediate (5-10 minutes)
+  □ Read START-HERE.md
+  □ Run local setup (3 terminals)
+  □ Test the demo
+  □ Click around the UI
+
+Short Term (30 minutes)
+  □ Read QUICK-START.md
+  □ Explore LOCAL-SETUP.md
+  □ Review API-REFERENCE.md
+  □ Understand architecture
+
+Medium Term (1-2 hours)
+  □ Read full README.md
+  □ Follow GCP-SETUP.md
+  □ Deploy to Cloud Run
+  □ Test cloud deployment
+
+Long Term (Optional)
+  □ Connect real logs
+  □ Customize incident types
+  □ Integrate with Slack
+  □ Add monitoring
+  □ Scale to production
+
+=============================================================================
+                          SUPPORT & DOCS
+=============================================================================
+
+Getting Started?
+  → START-HERE.md or QUICK-START.md
+
+Want to run locally?
+  → LOCAL-SETUP.md
+
+Want to deploy to cloud?
+  → GCP-SETUP.md
+
+Need API details?
+  → API-REFERENCE.md
+
+Want full architecture?
+  → README.md or PROJECT-SUMMARY.md
+
+Have issues?
+  → See troubleshooting section in relevant guide
+
+=============================================================================
+                           YOU'RE ALL SET!
+=============================================================================
+
+Everything is built and ready to use. Pick your starting point:
+
+1. 🚀 QUICK DEMO
+   Run 3 terminals for local demo (3 min)
+   See: QUICK-START.md
+
+2. 🌱 LEARN
+   Understand the platform
+   See: START-HERE.md → README.md
+
+3. ☁️ DEPLOY
+   Get it on Cloud Run
+   See: GCP-SETUP.md
+
+4. 🔧 DEVELOP
+   Modify and extend
+   See: LOCAL-SETUP.md
+
+=============================================================================
+
+Happy coding! 🎉
+
+Questions? Check the relevant .md file.
+Ready to run? Follow QUICK-START.md.
+Questions? See API-REFERENCE.md.
+
+═════════════════════════════════════════════════════════════════════════

@@ -1,0 +1,30 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cloudops-ai-frontend
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: us-central1-docker.pkg.dev/PROJECT_ID/cloudops-ai/frontend:latest
+        ports:
+        - containerPort: 3000
+        env:
+        - name: REACT_APP_API_URL
+          value: "https://BACKEND_SERVICE_URL"
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "500m"
+          limits:
+            memory: "1Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /
+            port: 3000
+          initialDelaySeconds: 5
+          periodSeconds: 10
+      timeoutSeconds: 3600
+      serviceAccountName: default

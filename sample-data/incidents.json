@@ -1,0 +1,40 @@
+{
+  "sample_incidents": [
+    {
+      "id": "incident-001",
+      "type": "db_timeout",
+      "severity": "high",
+      "message": "Database connection timeout detected",
+      "status": "resolved",
+      "created_at": "2026-05-27T10:30:00Z",
+      "analysis": {
+        "root_cause": "Connection pool exhaustion due to peak traffic",
+        "confidence": 0.92,
+        "affected_services": ["api-server", "worker-service"],
+        "estimated_impact": "High - 500 affected users",
+        "estimated_mttr": "5-10 minutes"
+      },
+      "recommended_action": "Increase database connection pool size and restart affected services",
+      "remediation": {
+        "status": "approved",
+        "action": "Increase DB pool from 50 to 100 and rolling restart",
+        "executed_at": "2026-05-27T10:35:00Z"
+      }
+    },
+    {
+      "id": "incident-002",
+      "type": "redis_unavailable",
+      "severity": "high",
+      "message": "Redis cache service unavailable",
+      "status": "open",
+      "created_at": "2026-05-27T11:15:00Z",
+      "analysis": {
+        "root_cause": "Redis memory limit exceeded",
+        "confidence": 0.88,
+        "affected_services": ["cache", "api-server"],
+        "estimated_impact": "Medium - Performance degradation",
+        "estimated_mttr": "10-15 minutes"
+      }
+    }
+  ]
+}

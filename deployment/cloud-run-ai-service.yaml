@@ -1,0 +1,38 @@
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: cloudops-ai-ai-service
+  namespace: default
+spec:
+  template:
+    spec:
+      containers:
+      - image: us-central1-docker.pkg.dev/PROJECT_ID/cloudops-ai/ai-service:latest
+        ports:
+        - containerPort: 8000
+        env:
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "PROJECT_ID"
+        - name: VERTEX_AI_LOCATION
+          value: "us-central1"
+        - name: VERTEX_AI_MODEL
+          value: "gemini-1.5-flash-001"
+        - name: LLM_PROVIDER
+          value: "vertex_ai"
+        - name: PORT
+          value: "8000"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "1000m"
+          limits:
+            memory: "2Gi"
+            cpu: "2000m"
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 8000
+          initialDelaySeconds: 10
+          periodSeconds: 30
+      timeoutSeconds: 3600
+      serviceAccountName: cloudops-ai-app
