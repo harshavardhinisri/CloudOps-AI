@@ -1,0 +1,32 @@
+# CloudOps AI - AI Service Dependencies with Google ADK
+# Version: 2.0.0 (ADK-powered multi-agent architecture)
+# Updated: May 2026 - Current compatible versions
+
+# Core Framework - LATEST STABLE
+fastapi
+uvicorn[standard]
+pydantic
+python-dotenv
+
+# Google Cloud & ADK - LATEST STABLE
+google-adk
+google-cloud-aiplatform
+google-generativeai
+vertexai
+google-auth
+
+# Additional Google Cloud Services
+google-cloud-logging
+google-cloud-pubsub
+google-cloud-firestore
+google-cloud-storage
+
+# Utilities
+requests
+aiohttp
+pydantic-settings
+
+# Development & Testing (optional)
+pytest
+pytest-asyncio
+pytest-cov
